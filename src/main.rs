@@ -180,6 +180,7 @@ use vulkanalia::vk::KhrDisplaySwapchainExtension;
 
 
 const PORTABILITY_MACOS_VERSION: Version = Version::new(1, 3, 216);
+const DEVICE_EXTENSIONS: &[vk::ExtensionName] = &[vk::KHR_SWAPCHAIN_EXTENSION.name];
 
 unsafe fn create_instance(
     window: &Window,
@@ -333,3 +334,4 @@ unsafe fn check_physical_device(
     QueueFamilyIndices::get(instance,data, physical_device)?;
     Ok(())
 }
+
