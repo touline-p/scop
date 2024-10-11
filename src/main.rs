@@ -293,6 +293,7 @@ const VALIDATION_ENABLED: bool =
 
 const VALIDATION_LAYER: vk::ExtensionName =
     vk::ExtensionName::from_bytes(b"VK_LAYER_KHRONOS_validation");
+    vk::ExtensionName::from_bytes(b"VK_LAYER_KHRONOS_validation\0");
 
 
 extern "system" fn debug_callback(
@@ -525,14 +526,11 @@ unsafe fn create_swapchain_image_views(
 }
 
 unsafe fn create_pipeline(device: &Device, data: &mut AppData) -> Result<()> {
-    let vert = include_bytes!("/home/bpoumeau/Documents/scop/shader/vert.spv");
-    let frag = include_bytes!("/home/bpoumeau/Documents/scop/shader/frag.spv");
+    let vert = include_bytes!("../shader/vert.spv");
+    let frag = include_bytes!("../shader/frag.spv");
 
     let vert_shader_module = create_shader_module(device, &vert[..])?;
     let frag_shader_module = create_shader_module(device, &frag[..])?;
-
-    device.destroy_shader_module(vert_shader_module, None);
-    device.destroy_shader_module(frag_shader_module, None);
 
     let vert_stage = vk::PipelineShaderStageCreateInfo::builder()
         .stage(vk::ShaderStageFlags::VERTEX)
@@ -616,7 +614,10 @@ unsafe fn create_pipeline(device: &Device, data: &mut AppData) -> Result<()> {
 
     data.pipeline = device.create_graphics_pipelines(vk::PipelineCache::null(), &[info], None)?.0[0];
 
-        Ok(())
+    device.destroy_shader_module(vert_shader_module, None);
+    device.destroy_shader_module(frag_shader_module, None);
+
+    Ok(())
 }
 
 unsafe fn create_shader_module(
