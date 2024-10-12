@@ -10,3 +10,12 @@ VkInstance creation
 
 
 spir-v
+
+
+
+to do 
+minimize and maximize
+explicite resize
+
+
+
